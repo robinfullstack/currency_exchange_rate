@@ -35,10 +35,8 @@ To set the command as a daily cron job to run at 1am, use the following command:
 
 An endpoint is available to retrieve the exchange rates for a given set of currencies.
 To use the endpoint, make a GET request to the following URL:
-```shell
-`[php bin/console app:generate-cron-job EUR GBP USD](http://localhost:8000/api/exchange-rates?base_currency=EUR&target_currencies=USD,GBP,COP,CAD
-)http://localhost:8000/api/exchange-rates?base_currency=EUR&target_currencies=USD,GBP,COP,CAD`
-```
+[php bin/console app:generate-cron-job EUR GBP USD](http://localhost:8000/api/exchange-rates?base_currency=EUR&target_currencies=USD,GBP,COP,CAD
+)http://localhost:8000/api/exchange-rates?base_currency=EUR&target_currencies=USD,GBP,COP,CAD
 
 The endpoint first checks Redis for the requested rates. If the rates are not in Redis, it fetches them from the MySQL database, stores them in Redis, and returns the rates. If the rates are in Redis, it returns the rates directly from Redis.
 
