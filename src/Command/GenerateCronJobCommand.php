@@ -21,7 +21,7 @@ class GenerateCronJobCommand extends Command
             ->addArgument('currencies', InputArgument::IS_ARRAY | InputArgument::REQUIRED, 'The currencies to fetch exchange rates for (e.g., EUR USD)');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $currencies = $input->getArgument('currencies');
         $currenciesString = implode(' ', $currencies);

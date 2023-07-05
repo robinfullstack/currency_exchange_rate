@@ -39,7 +39,7 @@ class FetchExchangeRatesCommand extends Command
             ->addArgument('target_currencies', InputArgument::IS_ARRAY | InputArgument::REQUIRED, 'Target currencies (space-separated)');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $baseCurrency = $input->getArgument('base_currency');
         $targetCurrencies = $input->getArgument('target_currencies');
