@@ -5,23 +5,25 @@ namespace App\Command;
 use App\Entity\ExchangeRate;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use GuzzleHttp\ClientInterface;
+use Predis\ClientInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use GuzzleHttp\Client;
 
 class FetchExchangeRatesCommand extends Command
 {
     protected static $defaultName = 'app:currency:rates';
 
-    private $httpClient;
+    //private $httpClient;
     private $entityManager;
 
-    public function __construct(ClientInterface $httpClient, EntityManagerInterface $entityManager, string $apiKey)
+    public function __construct(EntityManagerInterface $entityManager, ClientInterface $redisClient, string $apiKey)
     {
-        $this->httpClient = $httpClient;
+        //$this->httpClient = $httpClient;
         $this->entityManager = $entityManager;
+        $this->redisClient = $redisClient;
 		$this->apiKey = $apiKey;
 
         parent::__construct();
@@ -42,8 +44,11 @@ class FetchExchangeRatesCommand extends Command
         $targetCurrencies = $input->getArgument('target_currencies');
 
         $url = 'https://api.currencyfreaks.com/latest?base=' . $baseCurrency . '&apikey=' . $this->apiKey;
-        $response = $this->httpClient->get($url);
-        $data = json_decode($response->getBody()->getContents(), true);
+        $httpClient = new Client();
+        $response = $httpClient->request('GET', $url);
+        $data = json_decode($response->getBody(), true);
+
+        $exchangeRates = [];
 
         foreach ($data['rates'] as $currency => $rate) {
             if (in_array($currency, $targetCurrencies)) {
@@ -54,12 +59,17 @@ class FetchExchangeRatesCommand extends Command
                 $exchangeRate->setCreatedAt(new DateTime());
 
                 $this->entityManager->persist($exchangeRate);
+
+                $exchangeRates[$currency] = $rate;
             }
         }
 
         $this->entityManager->flush();
 
-        $output->writeln('Exchange rates fetched and saved successfully.');
+        $this->redisClient->set('exchange_rates', json_encode($exchangeRates));
+        $this->redisClient->expire('exchange_rates', 3600); // Set an expiry time (e.g., 1 hour)
+
+        $output->writeln('Exchange rates fetched, saved in MySQL, and stored in Redis.');
 
         return Command::SUCCESS;
     }

@@ -23,11 +23,15 @@ services:
     GuzzleHttp\Client:
         class: GuzzleHttp\Client
 
+    Predis\Client:
+        arguments:
+            - '%env(REDIS_URL)%'
+
     App\Command\FetchExchangeRatesCommand:
         arguments:
-            $httpClient: '@GuzzleHttp\Client'
             $entityManager: '@Doctrine\ORM\EntityManagerInterface'
             $apiKey: '%env(CURRENCYFREAKS_API_KEY)%'
+            $redisClient: '@Predis\Client'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
