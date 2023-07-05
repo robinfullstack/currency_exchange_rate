@@ -19,12 +19,13 @@ class FetchExchangeRatesCommand extends Command
     //private $httpClient;
     private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager, ClientInterface $redisClient, string $apiKey)
+    public function __construct(EntityManagerInterface $entityManager, ClientInterface $redisClient, string $apiKey, string $apiEndpoint)
     {
         //$this->httpClient = $httpClient;
         $this->entityManager = $entityManager;
         $this->redisClient = $redisClient;
 		$this->apiKey = $apiKey;
+        $this->apiEndpoint = $apiEndpoint;
 
         parent::__construct();
     }
@@ -43,7 +44,8 @@ class FetchExchangeRatesCommand extends Command
         $baseCurrency = $input->getArgument('base_currency');
         $targetCurrencies = $input->getArgument('target_currencies');
 
-        $url = 'https://api.currencyfreaks.com/latest?base=' . $baseCurrency . '&apikey=' . $this->apiKey;
+        // API endpoint and parameters
+        $url = $this->apiEndpoint . '?base=' . $baseCurrency . '&apikey=' . $this->apiKey;
         $httpClient = new Client();
         $response = $httpClient->request('GET', $url);
         $data = json_decode($response->getBody(), true);
