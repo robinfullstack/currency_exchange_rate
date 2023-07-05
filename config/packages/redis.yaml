@@ -1,0 +1,9 @@
+parameters:
+    redis_host: '%env(REDIS_HOST)%'
+    redis_port: '%env(REDIS_PORT)%'
+
+services:
+    Redis:
+        class: Predis\Client
+        arguments:
+            - 'redis://%redis_host%:%redis_port%'

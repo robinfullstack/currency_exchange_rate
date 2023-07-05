@@ -34,5 +34,8 @@ services:
             $apiEndpoint: '%env(ENDPOINT_FREAKS_API_URL)%'
             $redisClient: '@Predis\Client'
 
+    App\Controller\ExchangeRateController:
+        autowire: true
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
