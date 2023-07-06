@@ -30,16 +30,22 @@ A console command is available to fetch currency exchange rates and store them i
 To use the command, run the following:
 
 ```shell
-`php bin/console app:currency:rates EUR GBP USD COP`
+php bin/console app:currency:rates EUR GBP USD COP
 ```
 This command fetches the exchange rates for currencies like (EUR, GBP, USD, COP) from the CurrencyFreaks API. The rates are then saved in the MySQL database with EUR as the base currency and stored in Redis. For more information about the API, please visit the following link: https://currencyfreaks.com/documentation.html
 
 To set the command as a daily cron job to run at 1am, use the following command:
 ```shell
-`php bin/console app:generate-cron-job EUR GBP USD`
+php bin/console app:generate-cron-job EUR GBP USD
 ```
 
 ## API Endpoint
+
+Execute the server with the next command:
+
+```shell
+symfony server:start
+```
 
 An endpoint is available to retrieve the exchange rates for a given set of currencies.
 To use the endpoint, make a GET request to the following URL:
@@ -52,7 +58,7 @@ This project includes unit tests to verify the functionality of the console comm
 
 To execute the unit tests, run the following command:
 ```shell
-`php bin/phpunit`
+php bin/phpunit
 ```
 
 The FetchExchangeRatesCommand test ensures that the command fetches exchange rates, saves them in the database, and stores them in Redis. The output message is checked for the expected success message.

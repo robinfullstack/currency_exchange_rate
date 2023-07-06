@@ -12,13 +12,23 @@ class ExchangeRateControllerTest extends WebTestCase
      */
     public function testGetExchangeRates(): void
     {
-        $client = static::createClient([], [
-            'base_uri' => 'http://localhost:8000',
-        ]);
+        $client = static::createClient();
+
+        $baseUri = 'http://localhost';
+        $port = '8000';
+        
+        // Simulate a request to the endpoint
+        $requestPath = '/api/exchange-rates';
 
         // Define the base currency and target currencies for testing
         $baseCurrency = 'EUR';
         $targetCurrencies = ['USD', 'GBP'];
+        $queryParameters = ['base_currency' => $baseCurrency, 'target_currencies' => implode(',', $targetCurrencies)];
+        
+        // Build the full URL with the port number
+        $url = $baseUri . ':' . $port . $requestPath;
+        
+        $client->request('GET', $url, $queryParameters);
 
         // Simulate a request to the endpoint
         $client->request(
@@ -26,6 +36,10 @@ class ExchangeRateControllerTest extends WebTestCase
             '/api/exchange-rates',
             ['base_currency' => $baseCurrency, 'target_currencies' => implode(',', $targetCurrencies)]
         );
+
+        // Get the final URL of the request
+        $request = $client->getRequest();
+        $finalUrl = $request->getUri();
 
         // Check the response status code
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
