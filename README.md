@@ -14,6 +14,14 @@ Symfony version: 5.4
 
 1. Clone the repository.
 2. Run `composer install` to install the dependencies.
+3. Create the database with the following command:
+```shell
+php bin/console doctrine:database:create
+```
+4. Execute the migration command:
+```shell
+php bin/console doctrine:migrations:migrate
+```
 
 ## Console Command
 
