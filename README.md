@@ -56,13 +56,19 @@ The endpoint first checks Redis for the requested rates. If the rates are not in
 ## Unit Tests
 This project includes unit tests to verify the functionality of the console command and the API endpoint.
 
-To execute the unit tests, run the following command:
+The FetchExchangeRatesCommand test ensures that the command fetches exchange rates, saves them in the database, and stores them in Redis. The output message is checked for the expected success message.
+
+The ExchangeRateController test ensures that the controller returns a 200 OK status code and includes the expected target currencies in the response.
+
+To execute the unit test of FetchExchangeRatesCommand, run the following command:
 ```shell
-php bin/phpunit
+php bin/phpunit --filter FetchExchangeRatesCommandTest
 ```
 
-The FetchExchangeRatesCommand test ensures that the command fetches exchange rates, saves them in the database, and stores them in Redis. The output message is checked for the expected success message.
-The ExchangeRateController test ensures that the controller returns a 200 OK status code and includes the expected target currencies in the response.
+To execute the unit test of ExchangeRateController, run the following command:
+```shell
+php bin/phpunit --filter ExchangeRateControllerTest
+```
 
 ## Note
 Remember to execute composer update to ensure you have the latest versions of the project's dependencies.
