@@ -11,7 +11,7 @@ use Doctrine\DBAL\Types\Types;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230704204750 extends AbstractMigration
+final class Version20230705125702 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -24,9 +24,7 @@ final class Version20230704204750 extends AbstractMigration
         $table->addColumn('id', Types::INTEGER)
             ->setAutoincrement(true)
             ->setNotnull(true);
-        $table->addColumn('rate', Types::FLOAT)
-        ->setColumnOption('precision', 10)
-        ->setColumnOption('scale', 2);
+        $table->addColumn('rate', Types::FLOAT);
         $table->addColumn('base_currency', Types::STRING, ['length' => 3]);
         $table->addColumn('target_currency', Types::STRING, ['length' => 3]);
         $table->addColumn('created_at', Types::DATETIME_MUTABLE);
